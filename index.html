@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Neel's World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<!-- 🔷 HEADER -->
+<header class="app-header">
+  <div class="app-logo" onclick="goHome()">🎧 Neel'S World</div>
+
+  <div class="search-box">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search your feelings 😢"
+      oninput="searchSongs(this.value)"
+    />
+  </div>
+
+  <div class="menu-wrapper">
+    <div class="menu-icon" onclick="event.stopPropagation(); toggleMenu()">☰</div>
+    <div id="menuDropdown" class="menu-dropdown hidden" onclick="event.stopPropagation()">
+      <div onclick="openProfile()">Profile</div>
+      <div onclick="openSecret()">Message</div>
+    </div>
+  </div>
+</header>
+
+<!-- 🎵 SONG LIST -->
+<section id="songListScreen" class="screen">
+  <h1>🎵 Neelkanth’s Songs</h1>
+
+  <!-- <div class="filter-dropdown">
+    <label>Category</label>
+    <select onchange="filterSongs(this.value)">
+      <option value="all">All</option>
+      <option value="sad">Sad</option>
+      <option value="fun">Fun</option>
+      <option value="romantic">Romantic</option>
+    </select>
+  </div> -->
+<div class="filter-dropdown">
+  <span class="filter-label">Category</span>
+  <select onchange="filterSongs(this.value)">
+    <option value="all">All</option>
+    <option value="sad">Sad</option>
+    <option value="fun">Fun</option>
+    <option value="romantic">Romantic</option>
+  </select>
+</div>
+
+  <div class="song-list-container">
+    <ul id="songList"></ul>
+  </div>
+</section>
+
+<!-- 👤 PROFILE -->
+<section id="profileScreen" class="screen hidden profile-screen">
+  <div class="profile-box">
+    <button class="close" onclick="goHome()">✕</button>
+
+
+    <h1>😎 Hey, I’m Neelkanth</h1>
+
+    <p class="tagline">
+      I write code at night 🌙<br>
+      Fix bugs in the morning ☕<br>
+      And vibe with music all day 🎧
+    </p>
+
+    <div class="profile-cards">
+      <div class="card">💻 Web Developer</div>
+      <div class="card">🎵 Music Lover</div>
+      <div class="card">🔥 Night Debugger</div>
+    </div>
+
+    <p class="fun-line">
+      Building websites with <span>HTML</span>, <span>CSS</span>, <span>JavaScript</span><br>
+      and a little bit of <span>feelings ❤️</span>
+    </p>
+
+    <div class="social-links">
+      <a href="https://www.instagram.com/neelkanth_02/" target="_blank">📸 Instagram</a>
+      <a href="https://www.linkedin.com/in/neelkanth-mundkar/" target="_blank">💼 LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<div class="keyboard-hint">
+  ⌨ Space: Play/Pause • ← → Song • ↑ ↓ Volume • Esc: Close
+</div>
+
+<!-- 🎧 FULL PLAYER -->
+<section id="playerScreen" class="screen hidden" style="display:none">
+  <button class="close" onclick="closePlayer()">✕</button>
+
+  <h1 id="trackName">Loading...</h1>
+  <div class="artist">By Neelkanth</div>
+
+  <div class="progress-container" onclick="seek(event)">
+    <div id="progress" class="progress"></div>
+  </div>
+
+  
+
+  <div class="time-bar">
+  <span id="currentTime">0:00</span>
+  <span id="duration">0:00</span>
+</div>
+
+
+  <div class="controls">
+    <button onclick="prevSong()">⏮</button>
+    <button onclick="togglePlay()" id="playBtn">▶</button>
+    <button onclick="nextSong()">⏭</button>
+  </div>
+
+  <div class="volume">
+    🔊 <input type="range" min="0" max="1" step="0.01" onchange="setVolume(this.value)" />
+  </div>
+</section>
+
+<!-- 🎶 MINI PLAYER -->
+<div id="miniPlayer" class="mini-player hidden" onclick="openFromMini()">
+
+  <!-- 🔝 TOP PROGRESS BAR -->
+  <!-- <div class="mini-progress-top" onclick="seek(event)"> -->
+    <div class="mini-progress-top" onclick="event.stopPropagation(); seek(event)">
+    <div id="miniProgress"></div>
+  </div>
+<div class="mini-time-bar">
+  <span id="miniCurrentTime">0:00</span>
+  <span id="miniDuration">0:00</span>
+</div>
+
+  <!-- ⬅ LEFT INFO -->
+  <div class="mini-left">
+    <div id="miniTrack" class="mini-title">No song playing</div>
+    <div class="mini-artist">By Neelkanth</div>
+  </div>
+
+  <!-- 🎮 CENTER CONTROLS -->
+  <div class="mini-center">
+    <button onclick="event.stopPropagation(); prevSong()">⏮</button>
+    <button onclick="event.stopPropagation(); togglePlay()" id="miniPlayBtn">▶</button>
+    <button onclick="event.stopPropagation(); nextSong()">⏭</button>
+  </div>
+
+  
+
+
+
+  <!-- RIGHT CONTROLS -->
+  <div class="mini-right">
+    <button id="autoBtn" onclick="event.stopPropagation(); toggleAuto()">AUTO</button>
+    <button id="loopBtn" onclick="event.stopPropagation(); toggleLoop()">LOOP</button>
+  </div>
+
+</div>
+
+
+<!-- 🎧 HEADPHONE POPUP -->
+<div id="headphoneOverlay" class="overlay hidden">
+  <div class="headphone-box">
+    🎧 Headphones = Experience Next Level 😎
+  </div>
+</div>
+
+<!-- 🔐 SECRET MESSAGE -->
+
+<!-- 🔐 SECRET MESSAGE -->
+<div id="secretOverlay" class="overlay hidden">
+
+  <!-- ❌ CLOSE BUTTON (OUTSIDE POPUP) -->
+  <button class="overlay-close" onclick="closeSecret()">✕</button>
+
+  <div class="secret-box">
+
+    <!-- AUTH SECTION -->
+    <div id="secretAuth">
+      <h2>🔐 Access Required ! This Is For Special Ones</h2>
+      <input
+        type="password"
+        id="secretInput"
+        placeholder="Enter in my heart ❤️"
+      />
+      <button onclick="checkSecret()">💖 Let Me In</button>
+      <p id="secretError"></p>
+    </div>
+
+    <!-- MESSAGE SECTION -->
+    <div id="secretMessage" class="hidden">
+      ❤️ Hey,<br><br>
+      Agar tum yahan ho,<br>
+      toh tum special ho.<br><br>
+      Yeh message sirf tumhare liye hai.<br>
+      – Neelkanth
+    </div>
+
+  </div>
+</div>
+
+
+
+<script src="script.js"></script>
+</body>
+</html>
